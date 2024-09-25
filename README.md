@@ -3,7 +3,7 @@ This script reads an image, preprocesses it (grayscale, blur, thresholding), run
 Second Script:
 
 demo_result:
-Workflow: Reads an image, applies specified preprocessing, and performs OCR. Additionally, this script visualizes the OCR results by drawing bounding boxes around recognized words and displays the image with these annotations.
+Reads an image, applies specified preprocessing, and performs OCR. Additionally, this script visualizes the OCR results by drawing bounding boxes around recognized words and displays the image with these annotations.
 
 
 improve_test:
