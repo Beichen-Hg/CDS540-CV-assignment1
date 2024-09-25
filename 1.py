@@ -3,7 +3,6 @@ import pytesseract
 import numpy as np
 import itertools
 import time
-import os
 from Levenshtein import distance as levenshtein_distance
 
 def preprocess_image(image_path, blur_kernel, thresh_method):
