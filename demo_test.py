@@ -5,6 +5,17 @@ import itertools
 import time
 
 def preprocess_image(image_path, blur_kernel, thresh_method):
+
+    # Preprocess the image for OCR.  
+      
+    # Parameters:  
+    # - image_path: str, path to the image file.  
+    # - blur_kernel: int, size of the Gaussian blur kernel.  
+    # - thresh_method: str, thresholding method ('otsu', 'adaptive', 'fixed').  
+      
+    # Returns:  
+    # - binary_image: np.ndarray, the preprocessed binary image. 
+
     image = cv2.imread(image_path)
     if image is None:
         raise ValueError("Image could not be loaded, check the file path.")
@@ -26,12 +37,35 @@ def preprocess_image(image_path, blur_kernel, thresh_method):
     
     return binary_image
 
+
+
 def run_ocr(binary_image, psm):
+
+    # Run OCR on the binary image.  
+      
+    # Parameters:  
+    # - binary_image: np.ndarray, the preprocessed binary image.  
+    # - psm: int, page segmentation mode for Pytesseract.  
+      
+    # Returns:  
+    # - text: str, recognized text from the image.  
+
     config = f'--oem 3 --psm {psm}'
     text = pytesseract.image_to_string(binary_image, config=config)
     return text
 
 def test_params(image_path, ground_truth, params_combinations):
+
+    # Test different parameter combinations for preprocessing and OCR.  
+      
+    # Parameters:  
+    # - image_path: str, path to the image file.  
+    # - ground_truth: str, expected text for accuracy calculation.  
+    # - params_combinations: list of tuples, parameter combinations to test.  
+      
+    # Returns:  
+    # - results: list of tuples, each containing parameters, accuracy, and duration.
+
     results = []
     for params in params_combinations:
         blur_kernel, thresh_method, psm = params
@@ -48,6 +82,9 @@ def test_params(image_path, ground_truth, params_combinations):
     return results
 
 def main():
+
+    # Main function to run OCR parameter testing.
+
     image_path = 'pic2.jpg'
     ground_truth = """
 Introduction
@@ -75,4 +112,4 @@ all of which we'll cover in this lesson. (This is just a small subset of the ava
     print(f"Duration: {best_params[2]:.4f} seconds")
 
 if __name__ == "__main__":
-    main()
+    main() # Run the main function
