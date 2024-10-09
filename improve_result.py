@@ -23,7 +23,7 @@ def apply_ocr(image_path, blur_kernel, thresh_method, psm):
     # Output the recognized text  
     print("Detected Text:")  
     # Print text with confidence higher than 60  
-    print("\n".join([data['text'][i] for i in range(len(data['text'])) if int(data['conf'][i]) > 60]))  
+    print(" ".join([data['text'][i] for i in range(len(data['text'])) if int(data['conf'][i]) > 60]))  
       
     # Visualization: Draw bounding boxes around words  
     n_boxes = len(data['text'])  
