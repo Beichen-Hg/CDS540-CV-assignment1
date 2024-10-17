@@ -23,7 +23,7 @@ def preprocess_image(image_path, blur_kernel, thresh_method):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
     # Applying blur
-    if blur_kernel > 0:
+    if blur_kernel > 1:
         gray = cv2.GaussianBlur(gray, (blur_kernel, blur_kernel), 0)
 
     # Applying threshold

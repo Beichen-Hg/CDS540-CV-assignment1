@@ -1,9 +1,9 @@
 import cv2  
 import pytesseract  
 import numpy as np  
-import itertools  
-import time  
+import itertools   
 from Levenshtein import distance as levenshtein_distance  
+import time
   
 # Function to preprocess the image  
 def preprocess_image(image_path, blur_kernel, thresh_method):  
@@ -38,21 +38,25 @@ def draw_boxes_around_words(image, data):
 def test_params(image_path, ground_truth, params_combinations):  
     best_accuracy = 0  # Initialize best accuracy  
     best_image = None  # Initialize best image  
-    best_params = None  # Initialize best parameters  
+    best_params = None  # Initialize best parameters 
+    best_duration = float('inf')  # Initialize process time
     for params in params_combinations:  # Iterate through parameter combinations  
         blur_kernel, thresh_method, psm = params  
+        start_time = time.time()
         binary_image, original_image = preprocess_image(image_path, blur_kernel, thresh_method)  # Preprocess image  
         ocr_data = run_ocr(binary_image, psm)  # Run OCR  
         # Join recognized text with confidence over 60  
-        detected_text = ' '.join([ocr_data['text'][i] for i in range(len(ocr_data['text'])) if int(ocr_data['conf'][i]) > 60])  
+        detected_text = ' '.join([ocr_data['text'][i] for i in range(len(ocr_data['text'])) if int(ocr_data['conf'][i]) > 60])
+        duration = time.time() - start_time   
         # Calculate accuracy using Levenshtein distance  
         accuracy = 1 - levenshtein_distance(ground_truth, detected_text) / max(len(ground_truth), len(detected_text))  
         # Update best accuracy, parameters, and image if current accuracy is higher  
         if accuracy > best_accuracy:  
             best_accuracy = accuracy  
             best_params = params  
-            best_image = draw_boxes_around_words(original_image.copy(), ocr_data)  
-    return best_params, best_accuracy, best_image  # Return best parameters, accuracy, and image  
+            best_image = draw_boxes_around_words(original_image.copy(), ocr_data)
+            best_duration = duration  
+    return best_params, best_accuracy, best_image, best_duration # Return best parameters, accuracy, time, and image  
   
 # Main function  
 def main():  
@@ -71,11 +75,12 @@ all of which we'll cover in this lesson. (This is just a small subset of the ava
     # Generate all parameter combinations  
     params_combinations = list(itertools.product(blur_kernels, thresh_methods, psm_options))  
     # Test parameters and get the best result  
-    best_params, best_accuracy, best_image = test_params(image_path, ground_truth, params_combinations)  
+    best_params, best_accuracy, best_image, best_duration = test_params(image_path, ground_truth, params_combinations)  
     # Output the best parameters and accuracy  
     if best_image is not None:  
         print("Best Parameters:", best_params)  
-        print("Highest Accuracy: {:.2f}%".format(best_accuracy * 100))  
+        print("Highest Accuracy: {:.2f}%".format(best_accuracy * 100))
+        print("Processing Time: {:.4f} seconds".format(best_duration))  
         # Optionally save the best result image (code commented out)  
   
 if __name__ == "__main__":  
